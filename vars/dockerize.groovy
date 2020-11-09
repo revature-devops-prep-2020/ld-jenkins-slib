@@ -10,6 +10,7 @@ def call(String repoName, String versionTag, context, boolean useTrivy = false, 
             messenger.onComplete("${context.env.JOB_NAME}'s Docker image built successfully",
             "${context.env.JOB_NAME}'s Docker image failed to build")
             {
+                sh 'ls'
                 image = docker.build(repoName, dockerfileDir)
             }
             sh "docker tag ${repoName} ${repoName}:${versionTag}"
