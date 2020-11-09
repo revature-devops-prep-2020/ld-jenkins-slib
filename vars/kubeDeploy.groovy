@@ -11,6 +11,7 @@ def call(String kubeMasterURL, context,  String kubeCredentialsId = 'kube-sa', S
             "${context.env.JOB_NAME} failed to deploy to cluster.") {
                 withKubeConfig([credentialsId: kubeCredentialsId, serverUrl: kubeMasterURL])
                 {
+                    sh 'ls'
                     sh "kubectl apply -f ${directory}"
                 }
             }
