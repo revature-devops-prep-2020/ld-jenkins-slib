@@ -1,6 +1,6 @@
 import org.lawrencedang.SlackSender
 
-def call(String repoName, String versionTag, boolean useTrivy = false, String registryURL = '', String credentialsId = 'docker_hub_credentials', context)
+def call(String repoName, String versionTag, context, boolean useTrivy = false, String registryURL = '', String credentialsId = 'docker_hub_credentials')
 {
     stage('Docker build')
     {
