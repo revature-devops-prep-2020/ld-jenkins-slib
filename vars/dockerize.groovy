@@ -1,6 +1,6 @@
 import org.lawrencedang.SlackSender
 
-def call(String repoName, String versionTag, context, boolean useTrivy = false, String registryURL = '', String credentialsId = 'docker_hub_credentials')
+def call(String repoName, String versionTag, context, boolean useTrivy = false, String dockerfileDir = '', String registryURL = '', String credentialsId = 'docker_hub_credentials')
 {
     SlackSender messenger = new SlackSender(this)
     stage('Docker build')
@@ -10,7 +10,7 @@ def call(String repoName, String versionTag, context, boolean useTrivy = false, 
             messenger.onComplete("${context.env.JOB_NAME}'s Docker image built successfully",
             "${context.env.JOB_NAME}'s Docker image failed to build")
             {
-                image = docker.build(repoName)
+                image = docker.build(repoName, dockerfileDir)
             }
             sh "docker tag ${repoName} ${repoName}:${versionTag}"
         }
