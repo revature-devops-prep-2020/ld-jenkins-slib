@@ -21,7 +21,7 @@ class SlackSender {
         catch(Exception e)
         {
             this.context.slackSend(color: SUCCESS_COLOR, message: failure)
-            error(failure)
+            this.context.error(failure)
             return
         }
         this.context.slackSend(color: FAIL_COLOR, message: success)
