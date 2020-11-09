@@ -2,11 +2,12 @@ import org.lawrencedang.SlackSender
 
 def call(String repoName, String versionTag, context, boolean useTrivy = false, String registryURL = '', String credentialsId = 'docker_hub_credentials')
 {
+    SlackSender messenger = new SlackSender(this)
     stage('Docker build')
     {
         docker.image('docker').inside('-v /var/run/docker.sock:/var/run/docker.sock')
         {
-            SlackSender.onComplete("${context.env.JOB_NAME}'s Docker image built successfully",
+            messenger.onComplete("${context.env.JOB_NAME}'s Docker image built successfully",
             "${context.env.JOB_NAME}'s Docker image failed to build")
             {
                 image = docker.build(repoName)
@@ -19,7 +20,7 @@ def call(String repoName, String versionTag, context, boolean useTrivy = false, 
     {
         stage('Trivy scan')
         {
-            SlackSender.onComplete("${context.env.JOB_NAME}'s trivy scan completed", 
+            messenger.onComplete("${context.env.JOB_NAME}'s trivy scan completed", 
             "${context.env.JOB_NAME}'s trivy scan failed") {
                 docker.image('aquasec/trivy').inside(['--net=host', 
                 '-v /var/run/docker.sock:/var/run/docker.sock', '--entrypoint='])
@@ -34,7 +35,7 @@ def call(String repoName, String versionTag, context, boolean useTrivy = false, 
     {
         docker.image('docker').inside('-v /var/run/docker.sock:/var/run/docker.sock')
         {
-            SlackSender.onComplete("${context.env.JOB_NAME}'s Docker image pushed to registry",
+            messenger.onComplete("${context.env.JOB_NAME}'s Docker image pushed to registry",
             "${context.env.JOB_NAME}'s Docker image failed to push")
             {
                 image = docker.image(repoName)

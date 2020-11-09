@@ -5,7 +5,12 @@ class SlackSender {
     static final String SUCCESS_COLOR = '#00FF00'
     static final String FAIL_COLOR = '#FF0000'
 
-    static void onComplete(String success, String failure, Closure script)
+    public SlackSender(context)
+    {
+        this.context = context
+    }
+
+    void onComplete(String success, String failure, Closure script)
     {
         try
         {
@@ -13,10 +18,10 @@ class SlackSender {
         }
         catch(Exception e)
         {
-            slackSend(color: SUCCESS_COLOR, message: failure)
+            context.slackSend(color: SUCCESS_COLOR, message: failure)
             error(failure)
             return
         }
-        slackSend(color: FAIL_COLOR, message: success)
+        context.slackSend(color: FAIL_COLOR, message: success)
     }
 }
